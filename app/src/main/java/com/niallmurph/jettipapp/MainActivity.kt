@@ -119,6 +119,7 @@ fun BillForm(
     val sliderPositionState = remember {
         mutableStateOf(0f)
     }
+    val splitRange = IntRange(start = 1, endInclusive = 12)
 
     Surface(
         modifier = Modifier
@@ -165,7 +166,7 @@ fun BillForm(
                 ) {
                     RoundIconButton(
                         imageVector = Icons.Default.Remove,
-                        onClick = { if (splitCount.value > 1) splitCount.value-- })
+                        onClick = { if (splitCount.value > splitRange.first) splitCount.value-- })
                     Text(
                         text = splitCount.value.toString(),
                         modifier = Modifier
@@ -174,7 +175,7 @@ fun BillForm(
                     )
                     RoundIconButton(
                         imageVector = Icons.Default.Add,
-                        onClick = { splitCount.value++ })
+                        onClick = { if (splitCount.value < splitRange.last) splitCount.value++ })
                 }
 
             }
