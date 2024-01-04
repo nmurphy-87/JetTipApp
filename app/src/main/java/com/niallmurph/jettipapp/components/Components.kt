@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CurrencyPound
 import androidx.compose.material.icons.rounded.Money
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
@@ -32,7 +33,7 @@ fun InputField(
         value = valueState.value,
         onValueChange = {valueState.value = it},
         label = {Text(text = labelId)},
-        leadingIcon = { Icon(imageVector = Icons.Rounded.Money, contentDescription = "Money Icon")},
+        leadingIcon = { Icon(imageVector = Icons.Rounded.CurrencyPound, contentDescription = "Money Icon")},
         singleLine = isSingleLine,
         textStyle = TextStyle(fontSize = 18.sp, color = MaterialTheme.colors.onBackground),
         modifier = modifier.padding(bottom = 10.dp, start = 10.dp, end = 10.dp),
