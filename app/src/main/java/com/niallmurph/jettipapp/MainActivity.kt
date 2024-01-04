@@ -3,6 +3,7 @@ package com.niallmurph.jettipapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -71,6 +72,27 @@ fun TopHeader(totalPerPerson : Double = 0.0) {
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun MainContent(){
+
+    Surface(
+        modifier = Modifier
+            .padding(2.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(corner = CornerSize(8.dp)),
+        border = BorderStroke(width = 1.dp, color = Color.LightGray)
+    ) {
+        Column() {
+            Text(text = "Hello")
+            Text(text = "Hello")
+            Text(text = "Hello")
+        }
+
+    }
+    
 }
 
 
