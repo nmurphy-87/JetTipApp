@@ -53,9 +53,10 @@ fun MyApp(content: @Composable () -> Unit) {
         Surface(
             color = MaterialTheme.colors.background
         ) {
-
-            //TopHeader()
-            MainContent()
+            Column {
+                TopHeader()
+                MainContent()
+            }
         }
     }
 
@@ -67,6 +68,7 @@ fun TopHeader(totalPerPerson: Double = 0.0) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(16.dp)
             .height(150.dp)
             .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
         color = Color(0xFFE9D7f7)
@@ -120,7 +122,7 @@ fun BillForm(
 
     Surface(
         modifier = Modifier
-            .padding(2.dp)
+            .padding(8.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         border = BorderStroke(width = 1.dp, color = Color.LightGray)
@@ -196,15 +198,20 @@ fun BillForm(
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text("33%")
                 Spacer(modifier = Modifier.height(16.dp))
 
                 //Slider
-                Slider(value = sliderPositionState.value, onValueChange = {newVal ->
-                    Log.d("SLIDER", "Slider val : $newVal")
-                    sliderPositionState.value = newVal
-                } )
+                Slider(
+                    value = sliderPositionState.value,
+                    onValueChange = { newVal ->
+                        Log.d("SLIDER", "Slider val : $newVal")
+                        sliderPositionState.value = newVal
+                    },
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                    steps = 5
+                )
             }
 //            } else {
 //                Box {}
