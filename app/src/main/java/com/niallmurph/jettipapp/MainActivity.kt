@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -112,6 +114,9 @@ fun BillForm(
     val splitCount = remember {
         mutableStateOf(1)
     }
+    val sliderPositionState = remember {
+        mutableStateOf(0f)
+    }
 
     Surface(
         modifier = Modifier
@@ -138,36 +143,72 @@ fun BillForm(
                     keyboardController?.hide()
                 }
             )
-            if (validState) {
-                Row(
-                    modifier = Modifier
-                        .padding(4.dp),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Text(
-                        text = "Split",
-                        modifier = Modifier.align(
-                            alignment = Alignment.CenterVertically
-                        )
+//            if (validState) {
+            Row(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Split",
+                    modifier = Modifier.align(
+                        alignment = Alignment.CenterVertically
                     )
-                    Spacer(modifier = Modifier.width(120.dp))
-                    Row(
-                        modifier = Modifier.padding(horizontal = 4.dp),
-                        horizontalArrangement = Arrangement.End
-                    ){
-                        RoundIconButton(imageVector = Icons.Default.Remove, onClick = { if(splitCount.value > 1) splitCount.value-- })
-                        Text(text = splitCount.value.toString(),
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                                .padding(start = 8.dp, end = 8.dp)
-                        )
-                        RoundIconButton(imageVector = Icons.Default.Add, onClick = { splitCount.value++ })
-                    }
-
+                )
+                Spacer(modifier = Modifier.width(120.dp))
+                Row(
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    RoundIconButton(
+                        imageVector = Icons.Default.Remove,
+                        onClick = { if (splitCount.value > 1) splitCount.value-- })
+                    Text(
+                        text = splitCount.value.toString(),
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(start = 8.dp, end = 8.dp)
+                    )
+                    RoundIconButton(
+                        imageVector = Icons.Default.Add,
+                        onClick = { splitCount.value++ })
                 }
-            } else {
-                Box {}
+
             }
+
+            // Tip Row
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 4.dp, vertical = 12.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Tip",
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+                Spacer(modifier = Modifier.width(200.dp))
+                Text(text = "$33.00")
+            }
+
+            //Tip Percentage
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Text("33%")
+                Spacer(modifier = Modifier.height(16.dp))
+
+                //Slider
+                Slider(value = sliderPositionState.value, onValueChange = {newVal ->
+                    Log.d("SLIDER", "Slider val : $newVal")
+                    sliderPositionState.value = newVal
+                } )
+            }
+//            } else {
+//                Box {}
+//            }
         }
 
     }
