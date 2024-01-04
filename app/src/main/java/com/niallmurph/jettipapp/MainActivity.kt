@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.niallmurph.jettipapp.components.InputField
 import com.niallmurph.jettipapp.ui.theme.JetTipAppTheme
+import com.niallmurph.jettipapp.utils.calculateTotalTip
 import com.niallmurph.jettipapp.widgets.RoundIconButton
 
 class MainActivity : ComponentActivity() {
@@ -84,7 +85,7 @@ fun TopHeader(totalPerPerson: Double = 0.0) {
                 style = MaterialTheme.typography.h5
             )
             Text(
-                text = "$$total",
+                text = "£$total",
                 style = MaterialTheme.typography.h4,
                 fontWeight = FontWeight.Bold
             )
@@ -121,6 +122,10 @@ fun BillForm(
     }
     val tipPercentage = (sliderPositionState.value * 100).toInt()
     val splitRange = IntRange(start = 1, endInclusive = 12)
+
+    val tipAmountState = remember {
+        mutableStateOf(0.0)
+    }
 
     Surface(
         modifier = Modifier
@@ -193,7 +198,7 @@ fun BillForm(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
                 Spacer(modifier = Modifier.width(200.dp))
-                Text(text = "$33.00")
+                Text(text = " £ ${tipAmountState.value}")
             }
 
             //Tip Percentage
@@ -210,6 +215,8 @@ fun BillForm(
                     onValueChange = { newVal ->
                         Log.d("SLIDER", "Slider val : $newVal")
                         sliderPositionState.value = newVal
+                        tipAmountState.value = calculateTotalTip(totalBill = totalBillState.value.toDouble(), tipPercentage = tipPercentage)
+
                     },
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp),
                     steps = 5
@@ -223,7 +230,6 @@ fun BillForm(
     }
 
 }
-
 
 @Preview(showBackground = true)
 @Composable
