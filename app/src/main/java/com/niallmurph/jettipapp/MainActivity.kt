@@ -1,6 +1,7 @@
 package com.niallmurph.jettipapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -56,11 +57,12 @@ fun MyApp(content: @Composable () -> Unit) {
 
 @Preview
 @Composable
-fun TopHeader(totalPerPerson : Double = 0.0) {
-    Surface(modifier = Modifier
-        .fillMaxWidth()
-        .height(150.dp)
-        .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
+fun TopHeader(totalPerPerson: Double = 0.0) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
         color = Color(0xFFE9D7f7)
     ) {
         Column(
@@ -85,7 +87,18 @@ fun TopHeader(totalPerPerson : Double = 0.0) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Preview
 @Composable
-fun MainContent(){
+fun MainContent() {
+    BillForm() { billAmt ->
+        Log.d("AMT", "Main Content : $billAmt")
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun BillForm(
+    modifier: Modifier = Modifier,
+    onValChange: (String) -> Unit = {}
+) {
 
     val totalBillState = remember { mutableStateOf("") }
     val validState = remember(totalBillState.value) {
@@ -106,16 +119,18 @@ fun MainContent(){
                 labelId = "Enter Bill",
                 enabled = true,
                 isSingleLine = true,
-            onAction = KeyboardActions{
-                if(!validState) return@KeyboardActions
-                //TODO: On Value Changed
-                keyboardController?.hide()
-            }
+                onAction = KeyboardActions {
+                    if (!validState) return@KeyboardActions
+
+                    onValChange(totalBillState.value.trim())
+
+                    keyboardController?.hide()
+                }
             )
         }
 
     }
-    
+
 }
 
 
