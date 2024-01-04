@@ -109,6 +109,9 @@ fun BillForm(
         totalBillState.value.trim().isNotEmpty()
     }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val splitCount = remember {
+        mutableStateOf(1)
+    }
 
     Surface(
         modifier = Modifier
@@ -152,8 +155,13 @@ fun BillForm(
                         modifier = Modifier.padding(horizontal = 4.dp),
                         horizontalArrangement = Arrangement.End
                     ){
-                        RoundIconButton(imageVector = Icons.Default.Remove, onClick = { /*TODO*/ })
-                        RoundIconButton(imageVector = Icons.Default.Add, onClick = { /*TODO*/ })
+                        RoundIconButton(imageVector = Icons.Default.Remove, onClick = { if(splitCount.value > 1) splitCount.value-- })
+                        Text(text = splitCount.value.toString(),
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .padding(start = 8.dp, end = 8.dp)
+                        )
+                        RoundIconButton(imageVector = Icons.Default.Add, onClick = { splitCount.value++ })
                     }
 
                 }
