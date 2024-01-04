@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.niallmurph.jettipapp.components.InputField
 import com.niallmurph.jettipapp.ui.theme.JetTipAppTheme
+import com.niallmurph.jettipapp.utils.calculateTotalPerPerson
 import com.niallmurph.jettipapp.utils.calculateTotalTip
 import com.niallmurph.jettipapp.widgets.RoundIconButton
 
@@ -55,7 +56,6 @@ fun MyApp(content: @Composable () -> Unit) {
             color = MaterialTheme.colors.background
         ) {
             Column {
-                TopHeader()
                 MainContent()
             }
         }
@@ -93,8 +93,6 @@ fun TopHeader(totalPerPerson: Double = 0.0) {
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
-@Preview
 @Composable
 fun MainContent() {
     BillForm() { billAmt ->
@@ -126,6 +124,12 @@ fun BillForm(
     val tipAmountState = remember {
         mutableStateOf(0.0)
     }
+
+    val totalPerPersonState = remember {
+        mutableStateOf(0.0)
+    }
+
+    TopHeader(totalPerPerson = totalPerPersonState.value)
 
     Surface(
         modifier = Modifier
@@ -172,7 +176,14 @@ fun BillForm(
                 ) {
                     RoundIconButton(
                         imageVector = Icons.Default.Remove,
-                        onClick = { if (splitCount.value > splitRange.first) splitCount.value-- })
+                        onClick = {
+                            if (splitCount.value > splitRange.first) splitCount.value--
+                            totalPerPersonState.value = calculateTotalPerPerson(
+                                totalBill = totalBillState.value.toDouble(),
+                                splitBy = splitCount.value,
+                                tipPercentage = tipPercentage
+                            )
+                        })
                     Text(
                         text = splitCount.value.toString(),
                         modifier = Modifier
@@ -181,7 +192,14 @@ fun BillForm(
                     )
                     RoundIconButton(
                         imageVector = Icons.Default.Add,
-                        onClick = { if (splitCount.value < splitRange.last) splitCount.value++ })
+                        onClick = {
+                            if (splitCount.value < splitRange.last) splitCount.value++
+                            totalPerPersonState.value = calculateTotalPerPerson(
+                                totalBill = totalBillState.value.toDouble(),
+                                splitBy = splitCount.value,
+                                tipPercentage = tipPercentage
+                            )
+                        })
                 }
 
             }
@@ -214,8 +232,19 @@ fun BillForm(
                     value = sliderPositionState.value,
                     onValueChange = { newVal ->
                         Log.d("SLIDER", "Slider val : $newVal")
+
                         sliderPositionState.value = newVal
-                        tipAmountState.value = calculateTotalTip(totalBill = totalBillState.value.toDouble(), tipPercentage = tipPercentage)
+
+                        tipAmountState.value = calculateTotalTip(
+                            totalBill = totalBillState.value.toDouble(),
+                            tipPercentage = tipPercentage
+                        )
+
+                        totalPerPersonState.value = calculateTotalPerPerson(
+                            totalBill = totalBillState.value.toDouble(),
+                            splitBy = splitCount.value,
+                            tipPercentage = tipPercentage
+                        )
 
                     },
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp),
